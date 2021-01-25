@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool hello = false;
+    //WOW
     public NavMeshAgent playerNav;
     public float moveSpeed = 6.0f;
     void Start()
