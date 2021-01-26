@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
+    public static PlayerMovement Instance { get; private set; }
 
 
     public delegate void OnFocusChanged(Interaction newFocus);
@@ -17,13 +18,17 @@ public class PlayerMovement : MonoBehaviour
     public NavMeshAgent playerNav;
     public LayerMask ground;
     public LayerMask monster;
+    public bool hasBeenSpotted = false;
 
     public bool interact = false;
+    public int skinType = 0;
+    public int activeSkin = 0;
+    public float skinTime;
     
     void Start()
     {
         playerNav = GetComponent<NavMeshAgent>();
-
+        Instance = this;
     }
     void Update()
     {

@@ -9,16 +9,16 @@ public class FieldOfView : MonoBehaviour
     [Range(0, 360)] public float viewAngle;
 
     public LayerMask targetMask;
+    public LayerMask playerMask;
     public LayerMask obstacleMask;
-
     public Vector3 directionOfLine(float angle)
     {
         angle += transform.eulerAngles.y;
 
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
-
-    public List<Transform> sightedTargets;
+    public List<Monster> monsters;
+    public List<GameObject> sightedTargets;
 
     [Header("Visual")]
     public float meshResolution;
@@ -37,6 +37,7 @@ public class FieldOfView : MonoBehaviour
             endPoint = _endPoint;
             dst = _dst;
             angle = _angle;
+            
         }
     }
 
@@ -54,13 +55,45 @@ public class FieldOfView : MonoBehaviour
     {
         FindVisibleTargets();
 
+        PoliceFindTarget();
+
         DrawFieldOfView();
+    }
+
+    void PoliceFindTarget() 
+    {
+        Collider[] playerInSight = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
+
+        if (gameObject.CompareTag("Police"))
+        {
+            for (int i = 0; i < playerInSight.Length; i++)
+            {
+                Transform possibleTarget = playerInSight[i].transform;
+                Vector3 dirToTarget = (possibleTarget.position - transform.position).normalized;
+
+                if (Vector3.Angle(transform.forward, dirToTarget) <= viewAngle / 2)
+                {
+                    float dstToTarget = Vector3.Distance(transform.position, possibleTarget.position);
+
+                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                    {
+                        Debug.Log("GameOver");
+                    }
+                }
+            }
+        }
     }
 
     void FindVisibleTargets()
     {
         sightedTargets.Clear();
-
+        foreach (Monster monster in monsters)
+        {
+            if(monster != null){
+                monster.inSight = false;
+            }
+        }
+        monsters.Clear();
         Collider[] targetsInSight = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInSight.Length; i++)
@@ -68,16 +101,33 @@ public class FieldOfView : MonoBehaviour
             Transform possibleTarget = targetsInSight[i].transform;
             Vector3 dirToTarget = (possibleTarget.position - transform.position).normalized;
 
-            if(Vector3.Angle(transform.forward, dirToTarget) <= viewAngle / 2)
+            if (Vector3.Angle(transform.forward, dirToTarget) <= viewAngle / 2)
             {
                 float dstToTarget = Vector3.Distance(transform.position, possibleTarget.position);
 
-                if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
-                    sightedTargets.Add(possibleTarget);
+                    if (possibleTarget.gameObject != gameObject)
+                    {
+                       sightedTargets.Add(possibleTarget.gameObject);
+                        
+                       if (!monsters.Contains(possibleTarget.gameObject.GetComponent<Monster>()))
+                       {
+                            monsters.Add(possibleTarget.gameObject.GetComponent<Monster>());
+
+                            foreach (Monster monster in monsters)
+                            {
+                                if (monster != null)
+                                {
+                                    monster.inSight = true;
+                                }
+                            }
+                       }
+                    }
                 }
             }
         }
+
     }
 
     ViewCastInfo ViewCast(float localAngle)

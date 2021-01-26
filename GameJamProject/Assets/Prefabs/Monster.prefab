@@ -49,14 +49,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b6da8b77a70df44a59234378f00d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 5
-  viewAngle: 60
+  viewRadius: 10
+  viewAngle: 100
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+  monsters: []
   sightedTargets: []
   meshResolution: 1
   showFragmentLines: 0
@@ -161,6 +162,8 @@ MonoBehaviour:
   radius: 2
   interactionTransform: {fileID: 5887925132546945684}
   player: {fileID: 0}
+  fieldOfView: {fileID: 0}
+  inSight: 0
 --- !u!1 &6063672009311388520
 GameObject:
   m_ObjectHideFlags: 0
