@@ -143,14 +143,14 @@ public class FieldOfViewEditor : Editor
 {
     private void OnSceneGUI()
     {
-        FieldOfView fieldOfView = (FieldOfView)target;
+        FieldOfView FOV = (FieldOfView)target;
         Handles.color = Color.white;
-        Handles.DrawWireArc(fieldOfView.transform.position, Vector3.up, Vector3.forward, 360, fieldOfView.viewRadius);
+        Handles.DrawWireArc(FOV.transform.position, Vector3.up, Vector3.forward, 360, FOV.viewRadius);
 
-        Vector3 lineA = fieldOfView.directionOfLine(-fieldOfView.viewAngle / 2);
-        Vector3 lineB = fieldOfView.directionOfLine(fieldOfView.viewAngle / 2);
+        Vector3 lineA = FOV.directionOfLine(-FOV.viewAngle / 2);
+        Vector3 lineB = FOV.directionOfLine(FOV.viewAngle / 2);
 
-        Handles.DrawLine(fieldOfView.transform.position, fieldOfView.transform.position + lineA * fieldOfView.viewRadius);
-        Handles.DrawLine(fieldOfView.transform.position, fieldOfView.transform.position + lineB * fieldOfView.viewRadius);
+        Handles.DrawLine(FOV.transform.position, FOV.transform.position + lineA * FOV.viewRadius);
+        Handles.DrawLine(FOV.transform.position, FOV.transform.position + lineB * FOV.viewRadius);
     }
 }
