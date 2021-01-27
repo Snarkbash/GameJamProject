@@ -46,6 +46,7 @@ public class Monster : Interaction
 
             case true:
                 Debug.Log("Fail");
+                PlayerMovement.Instance.hasBeenSpotted = true;
                 break;
         }
 

@@ -78,6 +78,7 @@ public class FieldOfView : MonoBehaviour
                     if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                     {
                         Debug.Log("GameOver");
+                        PlayerMovement.Instance.hasBeenSpotted = true;
                     }
                 }
             }

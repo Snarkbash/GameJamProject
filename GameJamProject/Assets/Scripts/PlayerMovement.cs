@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -23,8 +24,9 @@ public class PlayerMovement : MonoBehaviour
     public bool interact = false;
     public int skinType = 0;
     public int activeSkin = 0;
-    public float skinTime;
-    
+    public float skinTime = 30.0f;
+
+    public Slider timeSlider;
     void Start()
     {
         playerNav = GetComponent<NavMeshAgent>();
@@ -32,6 +34,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        skinTime -= Time.deltaTime;
+        timeSlider.value = skinTime / 30;
+
         if (target != null)
         {
             FaceTarget();

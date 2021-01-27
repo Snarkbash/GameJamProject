@@ -2,17 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkinChanging : MonoBehaviour
+public class SkinChanging : Interaction
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Interact()
     {
-        
+        switch (PlayerMovement.Instance.skinType) 
+        {
+            case 0:
+
+                break;
+
+            case 1:
+                PlayerMovement.Instance.activeSkin = PlayerMovement.Instance.skinType;
+                PlayerMovement.Instance.skinType = 0;
+                PlayerMovement.Instance.skinTime = 30.0f;
+                break;
+
+            case 2:
+                PlayerMovement.Instance.activeSkin = PlayerMovement.Instance.skinType;
+                PlayerMovement.Instance.skinType = 0;
+                PlayerMovement.Instance.skinTime = 30.0f;
+
+                break;
+
+            case 3:
+                PlayerMovement.Instance.activeSkin = PlayerMovement.Instance.skinType;
+                PlayerMovement.Instance.skinType = 0;
+                PlayerMovement.Instance.skinTime = 30.0f;
+
+                break;
+        }
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }
