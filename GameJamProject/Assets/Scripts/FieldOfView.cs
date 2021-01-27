@@ -187,7 +187,7 @@ public class FieldOfView : MonoBehaviour
     }
 }
 
-
+#if UNITY_EDITOR
 [CustomEditor (typeof(FieldOfView))]
 public class FieldOfViewEditor : Editor
 {
@@ -204,3 +204,5 @@ public class FieldOfViewEditor : Editor
         Handles.DrawLine(FOV.transform.position, FOV.transform.position + lineB * FOV.viewRadius);
     }
 }
+#endif
+
