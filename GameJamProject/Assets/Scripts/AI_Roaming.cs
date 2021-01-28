@@ -5,15 +5,19 @@ using UnityEngine.AI;
 
 public class AI_Roaming : MonoBehaviour
 {
+    [System.Serializable]
+    public class StopPointAndTime
+    {
+        public int stopPoint;
+        public float stopTime;
+    }
+
     public NavMeshAgent nav;
-    public Transform[] targetLocations;
+    public AIRoamingData data;
 
     public float reachRange;
 
     public bool loopPath;
-
-    public int[] stopPoints;
-    public float stopTime;
 
     [Header("Run Time")]
     [SerializeField] int currentTarget;
@@ -22,18 +26,23 @@ public class AI_Roaming : MonoBehaviour
 
     private void Start()
     {
-        nav.SetDestination(targetLocations[0].position);
+        if (nav == null)
+        {
+            nav = GetComponent<NavMeshAgent>();
+        }
+
+        nav.SetDestination(data.targetLocations[0]);
     }
 
     private void Update()
     {
-        if ((transform.position - targetLocations[currentTarget].position).magnitude <= reachRange)
+        if ((transform.position - data.targetLocations[currentTarget]).magnitude <= reachRange)
         {
-            for (int i = 0; i < stopPoints.Length; i++)
+            for (int i = 0; i < data.stopPointAndTime.Length; i++)
             {
-                if (stopPoints[i] == currentTarget && !stopped)
+                if (data.stopPointAndTime[i].stopPoint == currentTarget && !stopped)
                 {
-                    stopTimer = stopTime;
+                    stopTimer = data.stopPointAndTime[i].stopTime;
                     stopped = true;
                 }
             }
@@ -44,19 +53,27 @@ public class AI_Roaming : MonoBehaviour
             }
             else
             {
-                if (currentTarget + 1 != targetLocations.Length)
+                if (currentTarget + 1 != data.targetLocations.Length)
                 {
                     currentTarget++;
-                    nav.SetDestination(targetLocations[currentTarget].position);
+                    nav.SetDestination(data.targetLocations[currentTarget]);
                 }
                 else if (loopPath)
                 {
                     currentTarget = 0;
-                    nav.SetDestination(targetLocations[currentTarget].position);
+                    nav.SetDestination(data.targetLocations[currentTarget]);
                 }
 
                 stopped = false;
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Map")
+        {
+            Destroy(gameObject);
         }
     }
 }
