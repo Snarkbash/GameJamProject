@@ -18,7 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     public NavMeshAgent playerNav;
     public LayerMask ground;
-    public LayerMask monster;
+    public LayerMask interactionPoint;
+    public LayerMask skinPoint;
     public bool hasBeenSpotted = false;
 
     public bool interact = false;
@@ -60,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, monster))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, interactionPoint))
             {
                 playerNav.destination = hit.point;			
                 SetFocus(hit.collider.GetComponent<Interaction>());
